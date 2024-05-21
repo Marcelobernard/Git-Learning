@@ -45,13 +45,22 @@ def Main():
     root.title("Trabalho RAD")
     root.resizable(False, False)
     
-    label = tkinter.Label(root, text="Nome")
-    label.pack()
-
+    label1 = tkinter.Label(root, text="Nome")
     textoEntrada = tkinter.StringVar()
     e1 = tkinter.Entry(root)
     e1.bind('<Key>', lambda x:textoEntrada.set(e1.get()+x.char))
+    label1.pack()
     e1.pack()
+    label2 = tkinter.Label(root, text="cpf")
+    e2 = tkinter.Entry(root)
+    e2.bind('<Key>', lambda x:textoEntrada.set(e1.get()+x.char))
+    label2.pack()
+    e2.pack()
+    label3 = tkinter.Label(root, text="estado")
+    e3 = tkinter.Entry(root)
+    e3.bind('<Key>', lambda x:textoEntrada.set(e1.get()+x.char))
+    label3.pack()
+    e3.pack()
     
     test2 = tkinter.Button(root, text="Salvar")
     test2['command'] = funcExemplo  #alterar para chamar outra função
@@ -61,3 +70,4 @@ def Main():
     root.update()
     root.deiconify() #Maximiza a tela
     root.mainloop()  #loop principal, impede o código de seguir e permite capturar inputs
+Main()

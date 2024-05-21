@@ -1,10 +1,11 @@
 import tkinter
 from tkinter import messagebox as mb
 from tkinter import ttk
+from tkinter import *
 import sqlite3
 
-#começar com tela com um botão e um entry (nome)- v1
-#adicionar mais duas entrys (cpf e estado) e suas labels - v2
+#começar com tela com um botão e um entry (nome)- v1 ---------
+#adicionar mais duas entrys (cpf e estado) e suas labels - v2 ------
 #mudar o fundo para uma imagem mais bonita, adicionar readme.txt explicando como usar - v3
 #adicionar clicar no botão salva os 3 dados em um sqlite - v4
 #Criar uma branch em que le um config.txt com uma lista de 5 estados possiveis separados por pular linha - x1
@@ -43,7 +44,15 @@ def funcExemplo():
 def Main():
     root = tkinter.Tk()
     root.title("Trabalho RAD")
+    largura = 600
+    altura = 600
+    pos_x = 100
+    pos_y = 50
+    root.geometry(f"{largura}x{altura}+{pos_x}+{pos_y}")
     root.resizable(False, False)
+    bg = PhotoImage(file = "nevoa1.gif")
+    label111 = Label( root, image = bg) 
+    label111.place(x = 0, y = 0) 
     
     label1 = tkinter.Label(root, text="Nome")
     textoEntrada = tkinter.StringVar()

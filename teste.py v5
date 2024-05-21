@@ -3,8 +3,8 @@ import sqlite3
 
 #começar com tela com um botão e um entry (nome)- v1 ---------
 #adicionar mais duas entrys (cpf e estado) e suas labels - v2 ------
-#mudar o fundo para uma imagem mais bonita, adicionar readme.txt explicando como usar - v3
-#adicionar clicar no botão salva os 3 dados em um sqlite - v4
+#mudar o fundo para uma imagem mais bonita, adicionar readme.txt explicando como usar - v3 --------
+#adicionar clicar no botão salva os 3 dados em um sqlite - v4 -------
 #Criar uma branch em que le um config.txt com uma lista de 5 estados possiveis separados por pular linha - x1
 #Mudar o separador para ; e adicionar mais 5 estados - x2
 #Voltar para main, criar outra branch e criar um dropdown com 3 opções (clt, mei, socio) - y1
@@ -21,11 +21,12 @@ cursor.execute("CREATE TABLE IF NOT EXISTS Tabela1 (nome TEXT, cpf TEXT, estado 
 
 def VerificarCPF(CPF):
     # CPF deve ser na forma "123.456.789-10"
-    for trecho in CPF.split("."):
-        if len(trecho) != 3:
-            return False
-        else:
-            return True
+    cpfinal = CPF.replace(".", "").replace("-", "")
+    if len(cpfinal) != 11 or not cpfinal.isdigit():
+        return False, None
+    else:
+        cpf_formatado = f"{cpfinal[:3]}.{cpfinal[3:6]}.{cpfinal[6:9]}-{cpfinal[9:]}"
+        return True, cpf_formatado
 
 def inserevalores(Valor1, Valor2, Valor3):
     # Insere linha na tabela
@@ -39,10 +40,11 @@ def pegavalores():
 
 def funcExemplo(e1, e2, e3):
     cpf = e2.get()
-    if VerificarCPF(cpf):
+    cpf_valido, cpf_formatado = VerificarCPF(cpf)
+    if cpf_valido:  # Verifica se o CPF é válido antes de prosseguir
         nome = e1.get()
         estado = e3.get()
-        inserevalores(nome, cpf, estado)
+        inserevalores(nome, cpf_formatado, estado)
         pegavalores()
     else:
         print("CPF inválido")

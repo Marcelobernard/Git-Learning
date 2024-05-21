@@ -1,7 +1,4 @@
-import tkinter
-from tkinter import messagebox as mb
-from tkinter import ttk
-from tkinter import *
+import tkinter as tk
 import sqlite3
 
 #começar com tela com um botão e um entry (nome)- v1 ---------
@@ -15,34 +12,43 @@ import sqlite3
 #Merge de x com v - v6
 #Adicionar verificação de CPF e de estado, com base na função cpf e na lista de estados .txt antes de adicionar no sqlite v7
 
-#Cria conexção
+# Cria conexão
 connection = sqlite3.connect("teste.db")
 
-#Cria o cursos e cria a tabela
+# Cria o cursor e cria a tabela
 cursor = connection.cursor()
-cursor.execute("CREATE TABLE IF NOT EXISTS Tabela1 (nome TEXT, curso TEXT, matricula INTEGER)")
+cursor.execute("CREATE TABLE IF NOT EXISTS Tabela1 (nome TEXT, cpf TEXT, estado TEXT)")
+
 def VerificarCPF(CPF):
-    #CPF deve ser na forma "123.456.789-10"
+    # CPF deve ser na forma "123.456.789-10"
     for trecho in CPF.split("."):
-        if len(trecho)!=3:
+        if len(trecho) != 3:
             return False
         else:
             return True
 
-def inserevalores(Valor1, Valor2):
-    #Insere linha na tabela
-    cursor.execute("INSERT INTO Tabela1 VALUES ('"+Valor1+"', '"+Valor2+"')")
+def inserevalores(Valor1, Valor2, Valor3):
+    # Insere linha na tabela
+    cursor.execute("INSERT INTO Tabela1 VALUES (?, ?, ?)", (Valor1, Valor2, Valor3))
+    connection.commit()
 
 def pegavalores():
-    #Pega valores da tabela
+    # Pega valores da tabela
     rows = cursor.execute("SELECT * FROM Tabela1").fetchall()
     print(rows)
 
-def funcExemplo():
-    print("Exemplo de funcao")
-    
+def funcExemplo(e1, e2, e3):
+    cpf = e2.get()
+    if VerificarCPF(cpf):
+        nome = e1.get()
+        estado = e3.get()
+        inserevalores(nome, cpf, estado)
+        pegavalores()
+    else:
+        print("CPF inválido")
+
 def Main():
-    root = tkinter.Tk()
+    root = tk.Tk()
     root.title("Trabalho RAD")
     largura = 600
     altura = 600
@@ -50,33 +56,32 @@ def Main():
     pos_y = 50
     root.geometry(f"{largura}x{altura}+{pos_x}+{pos_y}")
     root.resizable(False, False)
-    bg = PhotoImage(file = "nevoa1.gif")
-    label111 = Label( root, image = bg) 
-    label111.place(x = 0, y = 0) 
     
-    label1 = tkinter.Label(root, text="Nome")
-    textoEntrada = tkinter.StringVar()
-    e1 = tkinter.Entry(root)
-    e1.bind('<Key>', lambda x:textoEntrada.set(e1.get()+x.char))
+    bg = tk.PhotoImage(file="nevoa1.gif")
+    label111 = tk.Label(root, image=bg)
+    label111.place(x=0, y=0)
+    
+    label1 = tk.Label(root, text="Nome")
+    e1 = tk.Entry(root)
     label1.pack()
     e1.pack()
-    label2 = tkinter.Label(root, text="cpf")
-    e2 = tkinter.Entry(root)
-    e2.bind('<Key>', lambda x:textoEntrada.set(e1.get()+x.char))
+    
+    label2 = tk.Label(root, text="CPF")
+    e2 = tk.Entry(root)
     label2.pack()
     e2.pack()
-    label3 = tkinter.Label(root, text="estado")
-    e3 = tkinter.Entry(root)
-    e3.bind('<Key>', lambda x:textoEntrada.set(e1.get()+x.char))
+    
+    label3 = tk.Label(root, text="Estado")
+    e3 = tk.Entry(root)
     label3.pack()
     e3.pack()
     
-    test2 = tkinter.Button(root, text="Salvar")
-    test2['command'] = funcExemplo  #alterar para chamar outra função
+    test2 = tk.Button(root, text="Salvar", command=lambda: funcExemplo(e1, e2, e3))
     test2.pack()
 
-    root.iconify() #Minimiza a tela
+    root.iconify()
     root.update()
-    root.deiconify() #Maximiza a tela
-    root.mainloop()  #loop principal, impede o código de seguir e permite capturar inputs
+    root.deiconify()
+    root.mainloop()
+
 Main()
